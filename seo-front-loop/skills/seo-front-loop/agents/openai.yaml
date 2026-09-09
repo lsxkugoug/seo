@@ -1,0 +1,4 @@
+interface:
+  display_name: "SEO Front Loop"
+  short_description: "按可配置周期复查 SEO，读取自选关键词并保存改动历史，避免重复优化"
+  default_prompt: "使用 $seo-front-loop 读取项目配置、关键词和历史，判断本轮该观察、评估还是提出修改。"

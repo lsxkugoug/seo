@@ -1,0 +1,5 @@
+# 复制为管理项目的 config；不要覆盖已有配置，不要写入密钥。
+SEO_REVIEW_INTERVAL_DAYS=20
+SEO_REVIEW_MAX_CHECKS=3
+SEO_KEYWORDS_FILE=seo-keywords.json
+SEO_MEMORY_DIR=.seo-memory

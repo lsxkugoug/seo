@@ -1,0 +1,7 @@
+# SEO 明文配置，可提交 Git；不要在此保存密钥或令牌。
+# 由 seo_context.py 显式读取，不作为 shell 执行。
+# 只影响新实验；已部署实验使用各自冻结的 review_policy。
+SEO_REVIEW_INTERVAL_DAYS=20
+SEO_REVIEW_MAX_CHECKS=3
+SEO_KEYWORDS_FILE=seo-keywords.json
+SEO_MEMORY_DIR=.seo-memory

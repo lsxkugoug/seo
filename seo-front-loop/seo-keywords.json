@@ -1,0 +1,7 @@
+{
+  "primary": [],
+  "secondary": [],
+  "excluded": [],
+  "page_targets": {},
+  "notes": "在 primary 中填写你希望优先优化的关键词；secondary 填辅助词；excluded 填不想主动优化的词。page_targets 可按页面路径指定关键词。当前词表为空，未替你猜测产品方向。"
+}
