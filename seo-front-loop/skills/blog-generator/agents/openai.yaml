@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blog Generator"
+  short_description: "先查重，再规划有差异、有联系且能抓住读者的 Blog"
+  default_prompt: "Use $blog-generator to check the full content inventory for duplication before planning or drafting a distinct, well-linked blog."
