@@ -1,126 +1,107 @@
-标准窗口 打开, ID: open-panel, Secondary Actions: Raise
-	1 分离组
-		2 滚动区 Secondary Actions: Scroll Up, Scroll Down
-			3 外框 边栏
-				4 row (selectable) Description: 移动, Value: 文本编辑
-				5 row (selectable) Description: 时钟, Value: 最近使用
-				6 row (selectable) Description: 共享文件夹, Value: 共享
-				7 row (selectable, collapsed) Value: 个人收藏, Secondary Actions: Expand
-				8 row (selectable, expanded) Value: 位置, Secondary Actions: Collapse
-				9 row (selectable) Description: iCloud, Value: iCloud云盘
-				10 row (selectable) Description: 主页, Value: liuyuchen
-				11 row (selectable) Macintosh HD
-				12 row (selectable) 网络
-				13 row (selectable, expanded) Value: 标签, Secondary Actions: Collapse
-				14 row (selectable) 红色
-				15 row (selectable) 橙色
-				16 row (selectable) 黄色
-				17 row (selectable) 绿色
-				18 row (selectable) 蓝色
-				19 row (selectable) 紫色
-				20 row (selectable) 灰色
-				21 row (selectable) 所有标签…
-				22 row (selectable, expanded) Value: 媒体, Secondary Actions: Collapse
-				23 row (selectable) 音乐
-				24 row (selectable) 照片
-				25 row (selectable) Description: 电影, Value: 影片
-			26 滚动条 (settable, float) 0
-				27 值指示器 (settable, float) 0
-				28 增箭头按钮
-				29 减箭头按钮
-				30 增页面按钮
-				31 减页面按钮
-		32 分离器 (disabled, settable, float) 225
-		33 滚动区
-			34 外框 Description: 列表视图, ID: ListView
-				35 row (selectable) Description: 向下移动, Value: Qoder
-大小
-种类
-添加日期
-				36 row (selectable)
-					37 单元格
-						38 图像
-						39 文本栏 (settable) URL: file:///private/tmp/blog-generator-upload/validation-protocol.md, Value: validation-protocol.md, Secondary Actions: 打开“访达”项目
-					40 单元格
-						41 文本 2 KB
-					42 单元格
-						43 文本 Markdown文本文件
-					44 单元格
-						45 文本 今天 16:13
-				46 row (selectable)
-					47 单元格
-						48 图像
-						49 文本栏 (settable) URL: file:///private/tmp/blog-generator-upload/case-library.md, Value: case-library.md, Secondary Actions: 打开“访达”项目
-					50 单元格
-						51 文本 5 KB
-					52 单元格
-						53 文本 Markdown文本文件
-					54 单元格
-						55 文本 今天 16:13
-				56 row (selectable)
-					57 单元格
-						58 图像
-						59 文本栏 (settable) URL: file:///private/tmp/blog-generator-upload/editorial-framework.md, Value: editorial-framework.md, Secondary Actions: 打开“访达”项目
-					60 单元格
-						61 文本 6 KB
-					62 单元格
-						63 文本 Markdown文本文件
-					64 单元格
-						65 文本 今天 16:13
-				66 row (selectable)
-					67 单元格
-						68 图像
-						69 文本栏 (settable) URL: file:///private/tmp/blog-generator-upload/openai.yaml, Value: openai.yaml, Secondary Actions: 打开“访达”项目
-					70 单元格
-						71 文本 286 字节
-					72 单元格
-						73 文本 YAML
-					74 单元格
-						75 文本 今天 16:13
-				76 row (selectable)
-					77 单元格
-						78 图像
-						79 文本栏 (settable) URL: file:///private/tmp/blog-generator-upload/SKILL.md, Value: SKILL.md, Secondary Actions: 打开“访达”项目
-					80 单元格
-						81 文本 7 KB
-					82 单元格
-						83 文本 Markdown文本文件
-					84 单元格
-						85 文本 今天 16:13
-				86 row (selectable)
-					87 单元格
-						88 图像
-						89 文本栏 (settable) URL: file:///private/tmp/blog-generator-upload/seo-front-loop-README.md, Value: seo-front-loop-README.md, Secondary Actions: 打开“访达”项目
-					90 单元格
-						91 文本 7 KB
-					92 单元格
-						93 文本 Markdown文本文件
-					94 单元格
-						95 文本 今天 16:13
-				96 container
-					97 排序按钮 名称
-					98 排序按钮 大小
-					99 排序按钮 种类
-					100 排序按钮 添加日期
-		101 container
-			102 按钮 (disabled) 返回
-			103 按钮 (disabled) 前进
-		104 菜单按钮 Description: 列表, Help: 显示为图标、列表或分栏，和隐藏/显示边栏, ID: View Options
-		105 菜单按钮 Help: 更改项目的分组方式（按住Option键来更改排列顺序）, ID: Group or Sort By
-		106 弹出式按钮 位置：, Value: blog-generator-upload, ID: where popup
-		107 搜索文本栏 Search
-			108 按钮 搜索
-		109 按钮 新建文稿, ID: NewDocumentButton
-		110 按钮 显示选项, ID: OptionsButton
-		111 按钮 取消, ID: CancelButton
-		112 按钮 (disabled) 打开, ID: OKButton
-113 menu bar
-	114 文本编辑
-	115 文件
-	116 编辑
-	117 格式
-	118 显示
-	119 窗口
-	120 帮助
+# Blog 编辑框架
 
-The focused UI element is 34 外框 Description: 列表视图, ID: ListVie
+仅在规划一组文章、设计结构、审查重复或解释编辑决策时读取。
+
+## 1. 怎么让每篇 Blog 都不一样
+
+文章差异来自内容决策，不来自表面措辞。用以下五个维度比较候选与旧文：
+
+| 维度 | 核心问题 | 可观察证据 |
+| --- | --- | --- |
+| 读者情境 | 谁在什么时候遇到问题？ | 具体角色、阶段、限制或触发事件 |
+| 读者任务 | 他想理解、诊断、执行、比较还是核查？ | 读完后的动作或决定 |
+| 核心答案 | 本文到底主张什么？ | 可复述的一句话结论 |
+| 独有材料 | 哪些内容在旧文中没有？ | 原始例子、实测、案例、证据、反例或新方法 |
+| 阅读产物 | 读者带走什么？ | 步骤、判断标准、检查表、模板或完整解释 |
+
+处理规则：
+
+- 五个维度基本相同时，优先更新或合并。
+- 大主题相同，但读者任务和交付结果明确不同，可以独立成篇。
+- 只换年份、近义关键词、人群标签、标题格式或 slug，判为表面变体。
+- 声称“针对某人群”时，正文必须使用该人群独有的场景、限制和例子。
+- 材料不足以兑现角度时，输出材料缺口或调整角度；不要先生成泛文。
+
+一个快速反事实检查：若替换标题和少数关键词后，正文仍可原封不动用于另一主题，说明文章缺少与当前问题有关的内容。
+
+## 2. Blog 之间怎么相互关联
+
+围绕读者的下一步问题建图，而不是围绕关键词机械互链。
+
+| 关系 | 何时使用 | 例子 |
+| --- | --- | --- |
+| `prerequisite` | 当前内容需要一个基础概念 | 逐句修改前先理解“改变原意”的类型 |
+| `deeper_explanation` | 一个分支会打断本篇主线 | 教程中链接到机械表达的完整诊断 |
+| `evidence_or_example` | 读者需要案例或依据 | 方法文章链接到完整修改复盘 |
+| `next_action` | 当前任务完成后有自然下一步 | 修改完成后进入事实与引用核查 |
+
+每条关联至少写成：
+
+```text
+source → placement → target → reader_need → anchor_text
+```
+
+其中 `placement` 是读者产生问题的位置，`reader_need` 解释为什么此刻值得跳转。目标文章尚未发布时标为 `planned_relation`，不要生成虚构 URL。
+
+内链质量规则：
+
+- 核心答案留在当前页，不能把必要内容都外包给链接。
+- 锚文本描述目标内容，避免统一使用“了解更多”或“点击这里”。
+- 新文上线所需入口与额外旧文优化分开记录。
+- 修改来源旧文也属于改动；把链接两端和共享导航消费者纳入影响范围。
+- 同一意图有多页时先检查合理分工和蚕食风险，不能为增加链接而保留重复页。
+
+## 3. 什么结构能抓住读者
+
+抓住读者不是制造悬念，而是快速建立“这正是我的问题”和“继续读会得到什么”。
+
+### 常用任务结构
+
+| 类型 | 推荐推进顺序 | 合适的开头 |
+| --- | --- | --- |
+| 教程 | 目标结果 → 前提 → 步骤 → 验证 → 故障处理 | 具体结果或一个可执行起点 |
+| 诊断 | 症状 → 原因分类 → 区分方法 → 对应处理 | 读者刚刚遇到的可识别症状 |
+| 比较 | 使用场景 → 简短建议 → 比较标准 → 证据 → 取舍 | 两个相似场景为何需要不同选择 |
+| 案例 | 起点与限制 → 关键决定 → 过程 → 结果 → 适用边界 | 结果、失败点或决定性转折 |
+| 核查 | 待验证对象 → 风险 → 检查步骤 → 处理结果 | 一个看似可信但仍未证实的细节 |
+| 观点 | 主张 → 理由与证据 → 最强反对意见 → 适用边界 | 明确判断或值得解决的矛盾 |
+
+搜索解答型文章通常先回答，再解释。叙事文章可以延后部分答案，但开头仍需表明读者为什么值得继续。
+
+### 开头构造
+
+一个有效开头通常完成三件事：
+
+1. 给出一个具体处境、例子、结果、问题或选择。
+2. 点出真正的困难或常见误判。
+3. 承诺本文会交付的具体帮助。
+
+开头可以是一段，也可以分成几段，不要求固定字数。以下情况通常需要重写：
+
+- “在当今数字时代”一类与任务无关的背景。
+- 没有正文回答的修辞性问题。
+- 虚构“我测试了”“我们的用户发现”或权威背书。
+- 先解释所有基础概念，迟迟不给答案。
+- 每篇都使用相同的第二人称困境、三句节奏或转折句。
+
+为了防止连续文章同质化，记录近期文章的 `opening_device`、主要案例和结构类型。重复并非自动禁止；只有当相同形式最适合当前材料时才继续使用。
+
+## 4. 正文中的内容块
+
+按需要组合，不要求每篇集齐：
+
+- `answer`：直接回答一个问题。
+- `contrast`：通过前后或两种选择说明差异。
+- `evidence`：展示来源、数据、推理及限制。
+- `steps`：说明动作、预期结果和验证办法。
+- `decision`：按条件帮助读者选择。
+- `case`：展示具体情境、限制、处理和结果。
+- `failure`：解释常见失败及如何识别。
+
+内容块的顺序由读者任务决定。随机重排 block 不能制造真正差异。FAQ、表格、清单和产品 CTA 也只在确实帮助完成任务时使用。
+
+## 5. 一致性与差异性的边界
+
+跨文章保持一致的部分包括：产品事实、术语、来源标准、品牌判断、作者身份和基本语气。每篇需要变化的是读者任务、核心答案、材料、阅读产物和适合该材料的呈现方式。
+
+结尾应完成当前任务，而不是复述全文。可以提供检查动作、下一篇相关内容、试用入口或明确的停止条件；选择取决于读者此时真正需要什么。
