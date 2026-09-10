@@ -80,3 +80,6 @@ python3 -B -m unittest discover -s skills/seo-front-loop/scripts -p 'test_*.py' 
 本项目目录是 `/Users/shixianglong/Desktop/seo/seo-front-loop`。父目录 `seo` 用于容纳多个项目；本项目的说明、方案和后续实现放在本目录内。代码审计来源是另一个项目 `/Users/shixianglong/Desktop/seo-agent`；它不是本项目，也不是已确认的产品源码目录。新方案尚未确定实际产品源码路径与生产部署方式，不沿用旧配置作为默认授权。
 
 返回 [SEO 项目集合](../README.md)。
+
+
+Blog 选题、查重、结构与写作使用 [`$blog-generator`](skills/blog-generator/SKILL.md)。它在批准新 URL 前检查 live、archived、merged、redirected 库存和相近正文；库存不完整时只允许研究、更新/合并建议或延期，不允许把候选标为可发布。该 Skill 负责内容决策和草稿，发布、冻结与效果评估继续由 `$seo-front-loop` 管理。
