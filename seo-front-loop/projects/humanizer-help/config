@@ -1,8 +1,7 @@
-# SEO 明文配置，可提交 Git；不要在此保存密钥或令牌。
-# 由 seo_context.py 显式读取，不作为 shell 执行。
-# 周期只影响新实验；旧实验遵循原改动记录中的约定。
-# 填实际网站源码仓库，不是此 SEO 流程管理仓库；尚未确认，暂留空。
-SEO_REPOSITORY_URL=
+# 项目 humanizer.help；2026-09-13 用户已确认仓库与数据资源，授权待检查。
+# 复制为管理项目的 config；不要覆盖已有配置，不要写入密钥。
+# 实际网站源码仓库，例如 https://github.com/OWNER/REPO；不要填令牌。
+SEO_REPOSITORY_URL=https://github.com/lsxkugoug/writtting-front
 SEO_REVIEW_INTERVAL_DAYS=20
 SEO_REVIEW_MAX_CHECKS=3
 SEO_KEYWORDS_FILE=seo-keywords.json
@@ -10,24 +9,24 @@ SEO_MEMORY_DIR=.seo-memory
 
 # 数据源：首次运行由 Agent 检查，缺项时询问用户；不要猜站点或项目。
 # GSC 控制台中的资源原标识，例如 sc-domain:example.com 或 https://example.com/
-SEO_GSC_PROPERTY=
+SEO_GSC_PROPERTY=sc-domain:humanizer.help
 # access_token：读取 SEO_GSC_TOKEN_ENV 指定的本项目环境变量（短期令牌）。
 # adc：可续期 Google ADC；需 tools/requirements-adc.txt，凭据只读权限并获 GSC 资源授权。
 # adc：读取 SEO_GSC_CREDENTIALS_ENV 指定的环境变量，其值为本项目安全凭据文件路径。
-SEO_GSC_AUTH_MODE=access_token
+SEO_GSC_AUTH_MODE=adc
 # 只填变量名称，例如 PRODUCT_A_GSC_TOKEN / PRODUCT_A_GOOGLE_CREDENTIALS_FILE。
 # 不填令牌和文件内容；不回退到全局凭据。
-SEO_GSC_TOKEN_ENV=
-SEO_GSC_CREDENTIALS_ENV=
+SEO_GSC_TOKEN_ENV=HUMANIZER_HELP_GSC_TOKEN
+SEO_GSC_CREDENTIALS_ENV=HUMANIZER_HELP_GOOGLE_CREDENTIALS_FILE
 # PostHog 实际服务根地址：例如 https://us.posthog.com 或 https://eu.posthog.com
 # 自托管填自己的 HTTPS 地址；Agent 必须先确认它属于用户，才发送凭据。
-SEO_POSTHOG_HOST=
-SEO_POSTHOG_PROJECT_ID=
+SEO_POSTHOG_HOST=https://us.posthog.com
+SEO_POSTHOG_PROJECT_ID=300627
 # 业务确认的转化事件，逗号分隔，例如 signup_completed,payment_succeeded；未知可留空。
 # 留空仅采集 pageview；事件次数不是 SEO 归因转化。
 SEO_POSTHOG_CONVERSION_EVENTS=
 # 只填本项目密钥环境变量名称，例如 PRODUCT_A_POSTHOG_KEY，目标项目 query:read。
-SEO_POSTHOG_KEY_ENV=
+SEO_POSTHOG_KEY_ENV=HUMANIZER_HELP_POSTHOG_KEY
 # 不使用前端公开的项目采集 key；不在聊天、此文件或 Git 中保存任何令牌。
 # 每个项目独立 config、关键词和 .seo-memory；只允许周期环境变量覆盖配置。
 # 其他 SEO_ 环境变量与当前项目冲突时工具会报错，不跨项目继承。

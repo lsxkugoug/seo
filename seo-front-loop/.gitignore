@@ -1,5 +1,7 @@
 .env
+/keys/
 .seo-memory/
 __pycache__/
 *.pyc
 .DS_Store
+gen-lang-client-0063338634-977cc7a77465.json

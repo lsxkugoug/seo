@@ -1,0 +1,66 @@
+{
+  "primary": [
+    "humanizer meaning",
+    "humanizer means",
+    "does humanize ai work",
+    "how to humanize ai generated content",
+    "prompts to humanize ai text"
+  ],
+  "secondary": [
+    "what is ai humanizer",
+    "does humanizer ai work",
+    "does humanizing ai work",
+    "what is the best way to humanize ai text",
+    "best ways to humanize ai text",
+    "how to manually humanize ai text",
+    "humanize ai text prompt",
+    "humanize prompt",
+    "gpt prompt to humanize text",
+    "humanize essay",
+    "humanize essays",
+    "how to humanize ai essay",
+    "humanize paraphrase",
+    "paraphraser humanizer",
+    "rephrase tool humanize",
+    "best humanizer ai",
+    "best ai humanizers",
+    "best ai text humanizers",
+    "ai humanizer",
+    "humanizer",
+    "humanizer ai",
+    "ai text humanizer"
+  ],
+  "excluded": [
+    "humanization",
+    "humanisation",
+    "quillbot's ai humanizer",
+    "writehuman ai humanizer",
+    "litero humanizer",
+    "humanize io",
+    "humanizeer",
+    "humanaize ai",
+    "humnanizer",
+    "ai photo humanizer",
+    "ai code humanizer",
+    "humanize python",
+    "free unlimited humanizer",
+    "humanize ai text free 5000 words",
+    "humanizer ai free no sign up",
+    "humanizer to bypass turnitin",
+    "free ai humanizer turnitin"
+  ],
+  "page_targets": {
+    "/blog/what-is-ai-humanizer": [
+      "humanizer meaning",
+      "humanizer means",
+      "what is ai humanizer"
+    ],
+    "/": [
+      "ai humanizer",
+      "humanizer",
+      "humanizer ai",
+      "ai text humanizer"
+    ]
+  },
+  "notes": "2026-09-13 用户确认采用本轮筛选。目标只关注 GSC 搜索展示量、点击量和 CTR；注册/付费事件不作为当前前置条件，PostHog 仅作可选背景。优先检查既有定义文章的 meaning/means 词组，再研究是否有效、改善文本教程与提示词组；同意图近义词合并评估，不按词建页。secondary 中 essay 与 paraphrase 词组是条件候选，须先核实产品能力、现有页面及搜索意图；best 比较词组是后续候选，需真实比较测试，不是首轮执行项。首页核心词保留为长期方向，不授权改首页。excluded 表示本轮不主动优化，不是删词或永久禁止；其他竞品导航词、reddit/github/streamlit 平台意图、错拼、多语言、无限免费/免登录/具体字数承诺及检测绕过方向同样暂缓，除非新增证据并重新确认。cover letter、resume、poem 场景仅留后备，不列入本轮主动词组。目标国家、Semrush 数据库与 KD/Personal KD 列含义尚未确认，因此未把复制数值写成已验证指标。页面映射仅为候选承接关系，不是改站授权，也不替代未来实验冻结的查询集合。"
+}
