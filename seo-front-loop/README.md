@@ -21,7 +21,7 @@
 
 Skill 源文件为 [SKILL.md](skills/seo-front-loop/SKILL.md)，本机个人 Skill 目录使用指向它的链接，修改源文件即可更新，不维护两份副本。未出现时可重启 Codex 后检查；宿主可能采用不同的本地发现路径，不能把文件存在当作 UI 已验证加载。[官方 Skill 发现说明](https://learn.chatgpt.com/docs/build-skills#where-codex-loads-local-skills)
 
-Blog 选题、查重、结构与写作使用 [`$blog-generator`](skills/blog-generator/SKILL.md)。它在批准新 URL 前检查 live、archived、merged、redirected 库存和相近正文；库存不完整时只允许研究、更新/合并建议或延期，不允许把候选标为可发布。该 Skill 负责内容决策和草稿，发布、冻结与效果评估继续由 `$seo-front-loop` 管理。
+Blog 选题、查重、结构与写作使用仓库同级的 [`$blog-generator`](../blog-generator/SKILL.md)。它在批准新 URL 前检查 live、archived、merged、redirected 库存和相近正文；库存不完整时只允许研究、更新/合并建议或延期，不允许把候选标为可发布。该 Skill 负责内容决策和草稿，发布、冻结与效果评估继续由 `$seo-front-loop` 管理。
 
 ### 修改时间
 
