@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "project_id": "humanizer",
+  "site": {
+    "base_url": "https://www.humanizer.help",
+    "language": "en",
+    "country": "US",
+    "audiences": ["people improving AI-assisted writing"],
+    "product_facts_source": "https://www.humanizer.help"
+  },
+  "content_scope": {
+    "business_goal": "Help readers solve verifiable writing problems that Humanizer can genuinely support.",
+    "included_pillars": ["AI writing quality", "humanization", "editing workflow", "responsible AI-assisted writing"],
+    "excluded_topics": ["academic-integrity evasion", "unverified detector claims", "guaranteed ranking claims"],
+    "required_facts": ["Verify current product behavior and policy before publishing a product claim."]
+  },
+  "keywords": {
+    "primary": ["ai humanizer", "humanize ai text"],
+    "secondary": ["edit ai writing", "make ai writing sound natural"],
+    "excluded": []
+  },
+  "internal_link_policy": {
+    "min_contextual_historical_links": 1,
+    "allowed_relations": ["prerequisite", "deeper_explanation", "evidence_or_example", "next_action"]
+  },
+  "apis": {
+    "history": {
+      "url": "https://<humanizer-host>/api/internal/blogs",
+      "method": "GET",
+      "auth": { "header": "X-Blog-API-Key", "secret_env": "HUMANIZER_BLOG_API_KEY" },
+      "query": { "include": "body,links,archived,merged,redirected", "limit": 100 },
+      "response_contract": "inventory-v1"
+    },
+    "publish": {
+      "url": "https://<humanizer-host>/api/internal/publish_blogs",
+      "method": "POST",
+      "auth": { "header": "X-Blog-API-Key", "secret_env": "HUMANIZER_BLOG_API_KEY" },
+      "idempotency_header": "Idempotency-Key",
+      "mode": "auto_after_review",
+      "payload_contract": "publish-blog-v1"
+    }
+  }
+}
