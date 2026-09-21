@@ -6,7 +6,7 @@
 
 | 项目 | 用途 | 当前状态 |
 | --- | --- | --- |
-| [seo-front-loop](seo-front-loop/README.md) | Codex SEO Skill、用户关键词、可配置部署后复查周期及跨轮记忆协议 | Skill 与只读配置/日期工具已提供；完整账本服务和自动发布未实现 |
+| [seo-front-loop](seo-front-loop/README.md) | Codex SEO Skill、用户关键词、可配置部署后复查周期及跨轮记忆协议 | 已提供多项目配置、自然语言记忆协议及 GSC/PostHog 只读采集工具；自动发布未实现 |
 | [blog-generator](blog-generator/SKILL.md) | 通用 Blog 选题研究、重复防护、写作 brief、内链、项目配置与受控发布规范 | 已提供可复用 Skill；各站点通过独立配置接入历史文章和发布 API |
 
 ## 目录结构

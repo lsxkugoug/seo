@@ -1,0 +1,3 @@
+# Optional: only for renewable GSC ADC credentials. Bearer-token mode uses stdlib.
+google-auth>=2.29,<3
+requests>=2.31,<3

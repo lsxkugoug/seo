@@ -46,4 +46,4 @@ primary 为优先研究词，secondary 为辅助/长尾词，excluded 为不主�
 
 ## 核实易变规则
 
-涉及搜索展示、Schema 资格和具体技术规则时，使用当前官方资料并保存 checked_at 与来源。旧经验到期需复核，不自动重复试验。可按需查看 [标题链接](https://developers.google.com/search/docs/appearance/title-link)、[摘要](https://developers.google.com/search/docs/appearance/snippet)、[结构化数据规则](https://developers.google.com/search/docs/appearance/structured-data/sd-policies) 与 [搜索变化诊断](https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops)。不要把旧 FAQ 富媒体展示经验直接作为当前收益依据。
+涉及搜索展示、Schema 资格和具体技术规则时，使用当前官方资料并保存 复核日期 与来源。旧经验到期需复核，不自动重复试验。可按需查看 [标题链接](https://developers.google.com/search/docs/appearance/title-link)、[摘要](https://developers.google.com/search/docs/appearance/snippet)、[结构化数据规则](https://developers.google.com/search/docs/appearance/structured-data/sd-policies) 与 [搜索变化诊断](https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops)。不要把旧 FAQ 富媒体展示经验直接作为当前收益依据。

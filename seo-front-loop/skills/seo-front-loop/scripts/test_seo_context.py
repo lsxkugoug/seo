@@ -2,9 +2,11 @@
 import json
 from pathlib import Path
 import tempfile
+import subprocess
+import sys
 import unittest
 
-from seo_context import config, read_keywords, schedule, timestamp
+from seo_context import config, read_keywords, review_dates
 
 
 class ConfigTests(unittest.TestCase):
@@ -28,6 +30,21 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(value["max_days_from_live_verification"], 28)
         self.assertEqual(value["config_sources"]["SEO_REVIEW_INTERVAL_DAYS"], "process_environment")
         self.assertNotIn("hidden", json.dumps(value))
+
+    def test_repository_configuration(self):
+        self.assertIsNone(config(self.root, {})["repository_url"])
+        (self.root / "config").write_text("SEO_REPOSITORY_URL=https://github.com/example/site\n", encoding="utf-8")
+        self.assertEqual(config(self.root, {})["repository_url"], "https://github.com/example/site")
+        with self.assertRaises(ValueError):
+            config(self.root, {"SEO_REPOSITORY_URL": "https://github.com/example/other.git"})
+        value = config(self.root, {})
+        self.assertFalse(value["repository_access_verified"])
+
+    def test_repository_credentials_and_invalid_urls_rejected(self):
+        for url in ("https://token@github.com/example/site", "https://github.com/example/site?token=x",
+                    "file:///tmp/site", "https://other.example/example/site", "git@github.com:example/site.git"):
+            with self.subTest(url=url), self.assertRaises(ValueError):
+                config(self.root, {"SEO_REPOSITORY_URL": url})
 
     def test_tracked_config_is_read_and_legacy_env_is_ignored(self):
         (self.root / "config").write_text("SEO_REVIEW_INTERVAL_DAYS=9\n", encoding="utf-8")
@@ -73,73 +90,65 @@ class ConfigTests(unittest.TestCase):
 
     def test_missing_file_and_duplicate_json_fail(self):
         with self.assertRaises(OSError):
-            config(self.root, {"SEO_KEYWORDS_FILE": "missing.json"})
+            (self.root / "config").write_text("SEO_KEYWORDS_FILE=missing.json\n", encoding="utf-8")
+            config(self.root, {})
         (self.root / "duplicate.json").write_text('{"primary": [], "primary": ["x"]}', encoding="utf-8")
         with self.assertRaises(ValueError):
             read_keywords(self.root / "duplicate.json")
 
 
-class ScheduleTests(unittest.TestCase):
-    def setUp(self):
-        self.record = {"review_policy": {"interval_days": 20, "max_checks": 3},
-                       "live_verified_at": "2026-09-09T10:00:00+08:00", "reviews": [], "status": "observing"}
+class DateMathTests(unittest.TestCase):
+    def test_twenty_day_dates(self):
+        self.assertEqual(review_dates("2026-09-09T10:00:00+08:00", 20, 3),
+                         ["2026-09-29T02:00:00Z", "2026-10-19T02:00:00Z", "2026-11-08T02:00:00Z"])
 
-    def test_exact_day_twenty(self):
-        before = schedule(self.record, timestamp("2026-09-29T01:59:59Z"))
-        self.assertEqual(before["state"], "waiting")
-        due = schedule(self.record, timestamp("2026-09-29T02:00:00Z"))
-        self.assertEqual(due["due_checkpoints"], [1])
-        self.assertFalse(due["deadline_reached"])
+    def test_explicit_original_policy(self):
+        self.assertEqual(review_dates("2026-09-09T02:00:00Z", 7, 3)[-1],
+                         "2026-09-30T02:00:00Z")
 
-    def test_frozen_policy_not_global_settings(self):
-        self.record["review_policy"]["interval_days"] = 7
-        value = schedule(self.record, timestamp("2026-09-16T02:00:00Z"))
-        self.assertEqual(value["due_checkpoints"], [1])
-        self.assertEqual(value["deadline_at"], "2026-09-30T02:00:00Z")
+    def test_no_timezone_or_bad_date_fails(self):
+        for value in ("2026-09-09T02:00:00", "last week", "2026-02-30T00:00:00Z", None):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                review_dates(value, 20, 3)
 
-    def test_no_deployment_no_clock(self):
-        self.record["live_verified_at"] = None
-        value = schedule(self.record, timestamp("2026-11-09T02:00:00Z"))
-        self.assertEqual(value["state"], "awaiting_live_verification")
+    def test_invalid_policy_fails(self):
+        for interval, count in ((0, 3), (20, 0), (-1, 3), (1.5, 3), (20, 13), (True, 3)):
+            with self.subTest(interval=interval, count=count), self.assertRaises(ValueError):
+                review_dates("2026-09-09T02:00:00Z", interval, count)
 
-    def test_completed_review_next_checkpoint(self):
-        self.record["reviews"] = [{"checkpoint": 1, "reviewed_at": "2026-09-29T02:00:00Z"}]
-        value = schedule(self.record, timestamp("2026-09-30T02:00:00Z"))
-        self.assertEqual(value["next_review_at"], "2026-10-19T02:00:00Z")
+    def test_utc_elapsed_days_across_dst(self):
+        self.assertEqual(review_dates("2026-10-30T10:00:00-07:00", 7, 1),
+                         ["2026-11-06T17:00:00Z"])
 
-    def test_overdue_does_not_auto_close(self):
-        value = schedule(self.record, timestamp("2026-11-09T02:00:00Z"))
-        self.assertTrue(value["deadline_reached"])
-        self.assertEqual(value["recommended_checkpoint"], 3)
-        self.assertEqual(value["next_review_at"], "2026-11-08T02:00:00Z")
-        self.assertEqual(value["missed_earlier_checkpoints"], [1, 2])
-        self.assertEqual(value["state"], "review_due")
-        self.assertEqual(self.record["status"], "observing")
 
-    def test_closed_stays_closed(self):
-        self.record["status"] = "closed"
-        value = schedule(self.record, timestamp("2026-11-09T02:00:00Z"))
-        self.assertEqual(value["due_checkpoints"], [])
-        self.assertIsNone(value["next_review_at"])
+class CliTests(unittest.TestCase):
+    setUp = ConfigTests.setUp
+    def run_cli(self, *args):
+        return subprocess.run([sys.executable, "-B", str(Path(__file__).with_name("seo_context.py")),
+                               "--project", str(self.root), *args], capture_output=True, text=True)
 
-    def test_cancelled_unpublished_is_terminal(self):
-        for status in ("cancelled", "rejected"):
-            value = schedule({"status": status}, timestamp("2026-11-09T02:00:00Z"))
-            self.assertEqual(value["state"], "closed")
-            self.assertIsNone(value["next_review_at"])
+    def test_narrative_memory_is_not_parsed_or_modified(self):
+        memory = self.root / ".seo-memory"
+        memory.mkdir()
+        note = memory / "E001.md"
+        original = "这次已取消。旧周期是二十天，不能按当前设置重新上线。"
+        note.write_text(original, encoding="utf-8")
+        result = self.run_cli("--live-verified-at", "2026-09-09T02:00:00Z",
+                              "--interval-days", "20", "--max-checks", "3")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(len(json.loads(result.stdout)["calculated_review_dates"]), 3)
+        self.assertEqual(note.read_text(encoding="utf-8"), original)
+        self.assertEqual(list(memory.iterdir()), [note])
 
-    def test_invalid_frozen_and_timestamps_fail(self):
-        with self.assertRaises(ValueError):
-            schedule({}, timestamp("2026-11-09T02:00:00Z"))
-        with self.assertRaises(ValueError):
-            timestamp("2026-09-09T02:00:00")
-        with self.assertRaises(ValueError):
-            schedule(self.record, timestamp("2026-09-08T02:00:00Z"))
+    def test_partial_date_args_do_not_fall_back_to_config(self):
+        result = self.run_cli("--live-verified-at", "2026-09-09T02:00:00Z")
+        self.assertEqual(result.returncode, 2)
+        self.assertNotIn("calculated_review_dates", result.stdout)
 
-    def test_early_review_rejected(self):
-        self.record["reviews"] = [{"checkpoint": 1, "reviewed_at": "2026-09-10T02:00:00Z"}]
-        with self.assertRaises(ValueError):
-            schedule(self.record, timestamp("2026-10-19T02:00:00Z"))
+    def test_old_record_cli_is_rejected(self):
+        result = self.run_cli("--record", "old-experiment.json")
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("unrecognized arguments", result.stderr)
 
 
 if __name__ == "__main__":
