@@ -52,7 +52,7 @@ python3 scripts/validate_project_config.py config/projects/humanizer.local.json
 
 ## 自动发布 API：`publish-blog-v1`
 
-后端可新增 `POST /api/internal/publish_blogs`。接口必须验证配置指定请求头中的密钥，并把 `Idempotency-Key` 作为同一篇提交的去重键。建议后端返回：
+后端可新增 `POST /internal/publish_blogs`。接口必须验证配置指定请求头中的密钥，并把 `Idempotency-Key` 作为同一篇提交的去重键。建议后端返回：
 
 ```json
 {
@@ -77,6 +77,12 @@ Agent 发送的 JSON 必须符合以下结构。双花括号是生成时替换�
     "slug": "{{draft.slug}}",
     "excerpt": "{{draft.excerpt}}",
     "content_markdown": "{{reviewed_draft.markdown}}",
+    "author": "{{config.presentation_defaults.author}}",
+    "author_bio": "{{config.presentation_defaults.author_bio}}",
+    "avatar_seed": "{{config.presentation_defaults.avatar_seed}}",
+    "tag": "{{config.presentation_defaults.tag}}",
+    "read_time": "{{config.presentation_defaults.read_time}}",
+    "image": "{{config.presentation_defaults.image}}",
     "canonical_url": null,
     "seo": {
       "primary_keyword": "{{primary_keyword}}",
@@ -106,7 +112,7 @@ Agent 发送的 JSON 必须符合以下结构。双花括号是生成时替换�
 
 只有 `publish.mode` 为 `auto_after_review` 才执行 POST；必须同时满足：库存完整、正文级查重通过、所有事实与范围检查通过、审查状态为 `approved`、历史链接达到配置要求、库存快照仍有效、payload 完整、生成新的 UUID。调用后保存返回的 `publication_id`、URL、内容 ID 和幂等键。超时、5xx 或无响应时不换键重发；以原键查询后端或等待人工确认，避免重复文章。
 
-`manual_review` 模式只生成 payload 和审查结果，不调用发布 URL。实际接口上线前，后端需实现密钥校验、幂等去重、字段验证、草稿/发布状态和审计日志；本 Skill 不假装这些接口已存在。
+`manual_review` 模式只生成 payload 和审查结果，不调用发布 URL。Humanizer 后端的接口路径为 `/internal/blogs` 和 `/internal/publish_blogs`。上线前须在服务环境中设置 `BLOG_AUTOMATION_API_KEY`，执行版本库中的数据库迁移脚本，并通过健康检查后才可使用真实配置。
 
 ## 执行脚本
 

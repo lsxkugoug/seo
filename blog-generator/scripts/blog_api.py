@@ -90,7 +90,7 @@ def validate_publish_payload(payload: dict, config: dict) -> None:
     article = payload.get("article")
     if not isinstance(article, dict):
         raise ValueError("payload article is required")
-    for field in ("title", "slug", "content_markdown"):
+    for field in ("title", "slug", "excerpt", "content_markdown", "author", "tag", "read_time", "image"):
         if not isinstance(article.get(field), str) or not article[field].strip():
             raise ValueError(f"article.{field} is required")
     links = article.get("internal_links")
