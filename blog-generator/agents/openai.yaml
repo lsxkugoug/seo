@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blog Generator"
+  short_description: "研究选题、查重、内链与效果闭环的通用 Blog 规划"
+  default_prompt: "Use $blog-generator to research distinct blog topics for this website, check content overlap, and prepare a reviewable brief with linking and measurement needs."

@@ -7,6 +7,7 @@
 | 项目 | 用途 | 当前状态 |
 | --- | --- | --- |
 | [seo-front-loop](seo-front-loop/README.md) | Codex SEO Skill、用户关键词、可配置部署后复查周期及跨轮记忆协议 | 已提供多项目配置、自然语言记忆协议及 GSC/PostHog 只读采集工具；自动发布未实现 |
+| [blog-generator](blog-generator/SKILL.md) | 通用 Blog 选题研究、重复防护、写作 brief、内链、项目配置与受控发布规范 | 已提供可复用 Skill；各站点通过独立配置接入历史文章和发布 API |
 
 ## 目录结构
 
@@ -26,6 +27,12 @@ seo/
       PLAN.md
       MEMORY_SPEC.md
       RUNBOOK.md
+  blog-generator/
+    SKILL.md
+    config/projects/
+    references/
+    scripts/
+    agents/
 ```
 
 后续项目与 `seo-front-loop` 并列放置，并在上方项目表中增加入口。项目专属代码、配置和文档放在对应子目录，避免混入仓库根目录。

@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "project_id": "example-site",
+  "site": {
+    "base_url": "https://example.com",
+    "language": "en",
+    "country": "US",
+    "audiences": [
+      "primary reader"
+    ],
+    "product_facts_source": "https://example.com/product"
+  },
+  "content_scope": {
+    "business_goal": "Describe the reader or business outcome.",
+    "included_pillars": [
+      "A supported product or knowledge area"
+    ],
+    "excluded_topics": [
+      "Topics the site must not cover"
+    ],
+    "required_facts": [
+      "A source the writer must verify before making a claim"
+    ]
+  },
+  "keywords": {
+    "primary": [
+      "example primary keyword"
+    ],
+    "secondary": [
+      "example related question"
+    ],
+    "excluded": []
+  },
+  "internal_link_policy": {
+    "min_contextual_historical_links": 1,
+    "allowed_relations": [
+      "prerequisite",
+      "deeper_explanation",
+      "evidence_or_example",
+      "next_action"
+    ]
+  },
+  "apis": {
+    "history": {
+      "url": "https://<site-host>/api/internal/blogs",
+      "method": "GET",
+      "auth": {
+        "header": "X-Blog-API-Key",
+        "secret_env": "EXAMPLE_BLOG_API_KEY"
+      },
+      "query": {
+        "include": "body,links,archived,merged,redirected",
+        "limit": 100
+      },
+      "response_contract": "inventory-v1"
+    },
+    "publish": {
+      "url": "https://<site-host>/api/internal/publish_blogs",
+      "method": "POST",
+      "auth": {
+        "header": "X-Blog-API-Key",
+        "secret_env": "EXAMPLE_BLOG_API_KEY"
+      },
+      "idempotency_header": "Idempotency-Key",
+      "mode": "manual_review",
+      "payload_contract": "publish-blog-v1"
+    }
+  },
+  "presentation_defaults": {
+    "author": "Example Editorial Team",
+    "author_bio": "Describe the team that writes for this site.",
+    "avatar_seed": "Example",
+    "tag": "Guides",
+    "read_time": "6 min read",
+    "image": "https://example.com/og-image.png"
+  }
+}
