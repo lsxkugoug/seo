@@ -31,7 +31,7 @@ def validate_url(value: object, path: str, allow_template_urls: bool) -> None:
             return
         fail(f"{path} contains a template host; replace it before use")
     parsed = urlparse(url)
-    if parsed.scheme != "https" or not parsed.netloc:
+    if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password or parsed.fragment:
         fail(f"{path} must be an HTTPS URL")
 
 
@@ -48,10 +48,13 @@ def validate_auth(value: object, path: str) -> None:
 
 
 def validate(config: dict, allow_template_urls: bool) -> None:
+    if not isinstance(config, dict):
+        fail("root must be a JSON object")
     missing = REQUIRED - set(config)
     if missing:
         fail(f"missing root fields: {', '.join(sorted(missing))}")
-    require_string(config["schema_version"], "schema_version")
+    if config["schema_version"] != "1.0":
+        fail("unsupported schema_version")
     require_string(config["project_id"], "project_id")
     site = config["site"]
     if not isinstance(site, dict):
@@ -63,8 +66,8 @@ def validate(config: dict, allow_template_urls: bool) -> None:
         if not isinstance(config[section], dict):
             fail(f"{section} must be an object")
     min_links = config["internal_link_policy"].get("min_contextual_historical_links")
-    if not isinstance(min_links, int) or min_links < 0:
-        fail("internal_link_policy.min_contextual_historical_links must be a non-negative integer")
+    if type(min_links) is not int or min_links < 1:
+        fail("internal_link_policy.min_contextual_historical_links must be a positive integer")
     apis = config["apis"]
     if not isinstance(apis, dict) or set(apis) != {"history", "publish"}:
         fail("apis must contain exactly history and publish")
@@ -76,8 +79,13 @@ def validate(config: dict, allow_template_urls: bool) -> None:
         if api.get("method") != expected_method:
             fail(f"apis.{name}.method must be {expected_method}")
         validate_auth(api.get("auth"), f"apis.{name}.auth")
+    query = apis["history"].get("query", {})
+    if not isinstance(query, dict) or "cursor" in query:
+        fail("apis.history.query must be an object without a preset cursor")
+    if "limit" in query and (type(query["limit"]) is not int or query["limit"] < 1):
+        fail("apis.history.query.limit must be a positive integer")
     publish = apis["publish"]
-    if publish.get("mode") not in {"manual_review", "auto_after_review"}:
+    if publish.get("mode") not in ("manual_review", "auto_after_review"):
         fail("apis.publish.mode must be manual_review or auto_after_review")
     require_string(publish.get("idempotency_header"), "apis.publish.idempotency_header")
     if publish.get("payload_contract") != "publish-blog-v1":
