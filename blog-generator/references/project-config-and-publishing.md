@@ -103,24 +103,25 @@ Agent 发送的 JSON 必须符合以下结构。双花括号是生成时替换�
     "checks_passed": ["dedupe", "facts", "scope", "structure", "internal_links"]
   },
   "dedupe": {
-    "content_disposition": "new|update",
+    "content_disposition": "new",
     "closest_candidates": [],
     "body_reviewed": true
   }
 }
 ```
 
-只有 `publish.mode` 为 `auto_after_review` 才执行 POST；必须同时满足：库存完整、正文级查重通过、所有事实与范围检查通过、审查状态为 `approved`、历史链接达到配置要求、库存快照仍有效、payload 完整、生成新的 UUID。调用后保存返回的 `publication_id`、URL、内容 ID 和幂等键。超时、5xx 或无响应时不换键重发；以原键查询后端或等待人工确认，避免重复文章。
+只有 `publish.mode` 为 `auto_after_review` 才执行 POST；必须同时满足：库存完整、正文级查重通过、所有事实与范围检查通过、审查状态为 `approved`、历史链接达到配置要求、库存快照仍有效、payload 完整、生成新的 UUID。调用后保存返回的 `publication_id`、URL、内容 ID 和幂等键。超时、5xx 或无响应时不换键重发；保留原始 payload 和幂等键，等待人工核对发布结果，避免重复文章。当前 CLI 会在库存变化后阻断 POST，包括首次提交已成功但响应丢失的情况；不要换新键绕过这个阻断。后端自身支持相同 payload 和键的幂等重放。
 
-`manual_review` 模式只生成 payload 和审查结果，不调用发布 URL。Humanizer 后端的接口路径为 `/internal/blogs` 和 `/internal/publish_blogs`。上线前须在服务环境中设置 `BLOG_AUTOMATION_API_KEY`，执行版本库中的数据库迁移脚本，并通过健康检查后才可使用真实配置。
+`manual_review` 模式只生成 payload 和审查结果，不调用发布 URL。Humanizer 后端的接口路径为 `/internal/blogs` 和 `/internal/publish_blogs`。新版默认关闭发布，且不支持自动覆盖旧文章。上线前须设置 `BLOG_AUTOMATION_API_KEY`、与客户端一致的 `BLOG_AUTOMATION_PROJECT_ID`，验收后才开启 `BLOG_AUTOMATION_PUBLISH_ENABLED=true`；执行版本库中的数据库迁移脚本，并通过健康检查后才可使用真实配置。
 
 ## 执行脚本
 
 `scripts/blog_api.py` 使用标准库调用已配置的 API，不把密钥打印到输出。查询库存：
 
 ```bash
-HUMANIZER_BLOG_API_KEY='...' \
-python3 scripts/blog_api.py inventory --config config/projects/humanizer.local.json
+# 由团队的密钥管理方式注入 HUMANIZER_BLOG_API_KEY，避免把值写进命令历史。
+python3 scripts/blog_api.py inventory --config config/projects/humanizer.local.json \
+  --output /absolute/path/inventory.json
 ```
 
 先对审查通过的 payload 做本地预检：
@@ -128,7 +129,23 @@ python3 scripts/blog_api.py inventory --config config/projects/humanizer.local.j
 ```bash
 python3 scripts/blog_api.py publish \
   --config config/projects/humanizer.local.json \
-  --payload /absolute/path/reviewed-article.json
+  --payload /absolute/path/reviewed-article.json \
+  --inventory /absolute/path/inventory.json
 ```
 
 只有通过预检后才用 `--execute` 调用 API。脚本再次检查配置模式、审查状态、去重、历史链接、快照和幂等键；网络失败时不会自动以新键重发。
+
+
+## 完整性与安全边界
+
+客户端必须完成全部分页并校验各状态数量、完整正文、无重复 ID、游标推进和一致的快照，才保存 inventory.json。任何一页异常都停止，不能把部分库存作为成功结果。库存 API 的 `coverage` 描述服务端数据覆盖范围，不代表调用方已经读完所有分页。公开页面或归档系统中不在该 API 覆盖范围内的历史仍需另行核对。
+
+本地预检读取 `--inventory` 的已完整对账内容；`--execute` 发送前还会重新读取全部历史并与审查时内容比较。审核声明不等于程序完成了语义查重、事实核查；正文审查仍需由 Agent/编辑实际执行。需要更新旧文时走编辑流程，不要把 update 换成不同 slug 的 new 来规避重复保护。
+
+请求拒绝所有 HTTP 重定向，防止密钥被转发到另一个地址；配置必须填写最终 HTTPS API 地址。客户端配置校验只验证结构，服务器仍独立核对项目和密钥。
+
+验证命令（使用临时目录和模拟响应，不联系正式 API）：
+
+```bash
+python3 -m unittest discover -s scripts -p 'test_*.py' -v
+```
