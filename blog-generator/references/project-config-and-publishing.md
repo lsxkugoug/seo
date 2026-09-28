@@ -82,7 +82,8 @@ Agent 发送的 JSON 必须符合以下结构。双花括号是生成时替换�
     "avatar_seed": "{{config.presentation_defaults.avatar_seed}}",
     "tag": "{{config.presentation_defaults.tag}}",
     "read_time": "{{config.presentation_defaults.read_time}}",
-    "image": "{{config.presentation_defaults.image}}",
+    "image": "{{reviewed_image.direct_url}}",
+    "image_alt": "{{reviewed_image.alt_text}}",
     "canonical_url": null,
     "seo": {
       "primary_keyword": "{{primary_keyword}}",
@@ -109,6 +110,8 @@ Agent 发送的 JSON 必须符合以下结构。双花括号是生成时替换�
   }
 }
 ```
+
+`article.image` 不是站点默认图片。每篇文章都应按项目的 `image_policy` 独立检索并审查，至少保存直接图片 URL、来源页面、作者或摄影师、检索词和替代文本到本轮运行记录。直接 URL 必须返回成功的图片响应，图片应适合文章卡片的横向展示，并且不能与当前 live 文章重复。来源页面不可访问、授权不明、只有随机重定向 URL、图片与文章视觉方向明显不符或只能使用通用默认图时，本篇不得进入自动发布。
 
 只有 `publish.mode` 为 `auto_after_review` 才执行 POST；必须同时满足：库存完整、正文级查重通过、所有事实与范围检查通过、审查状态为 `approved`、历史链接达到配置要求、库存快照仍有效、payload 完整、生成新的 UUID。调用后保存返回的 `publication_id`、URL、内容 ID 和幂等键。超时、5xx 或无响应时不换键重发；保留原始 payload 和幂等键，等待人工核对发布结果，避免重复文章。当前 CLI 会在库存变化后阻断 POST，包括首次提交已成功但响应丢失的情况；不要换新键绕过这个阻断。后端自身支持相同 payload 和键的幂等重放。
 

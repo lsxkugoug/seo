@@ -57,7 +57,11 @@ def request(api: dict, *, query: dict | None = None, payload: dict | None = None
     url = api["url"]
     if query:
         url += ("&" if "?" in url else "?") + urlencode(query)
-    headers = {api["auth"]["header"]: secret, "Accept": "application/json"}
+    headers = {
+        api["auth"]["header"]: secret,
+        "Accept": "application/json",
+        "User-Agent": "Humanizer-Blog-Generator/1.0 (+https://www.humanizer.help)",
+    }
     body = None
     if payload is not None:
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")

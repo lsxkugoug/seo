@@ -74,11 +74,18 @@
     }
   },
   "presentation_defaults": {
-    "author": "Humanizer Editorial Team",
-    "author_bio": "The Humanizer Editorial Team writes practical guides for clearer AI-assisted writing.",
-    "avatar_seed": "Humanizer",
+    "author": "Humanizer.help Editorial Team",
+    "author_bio": "The Humanizer.help editorial team writes practical AI writing guides for students, ESL writers, and academic drafts that need clearer, more natural English.",
+    "avatar_seed": "humanizer-help-editorial",
     "tag": "AI Writing",
     "read_time": "6 min read",
-    "image": "https://www.humanizer.help/og-image.png"
+    "image_policy": {
+      "mode": "search_per_article",
+      "preferred_sources": ["pexels"],
+      "preferred_moods": ["healing", "study", "coffee", "scenery", "daily life"],
+      "orientation": "landscape",
+      "require_unique_url": true,
+      "fallback": "block_publish"
+    }
   }
 }
