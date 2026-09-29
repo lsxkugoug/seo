@@ -141,6 +141,11 @@ class BlogApiTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self._publish(page([item(1)], 1), p, True)
 
+    def test_unknown_internal_link_relation_never_posts(self):
+        p = self._payload(); p['article']['internal_links'][0]['relation'] = 'deeper_read'
+        with self.assertRaises(ValueError):
+            self._publish(page([item(1)], 1), p, True)
+
     def test_manual_review_mode_never_posts(self):
         self.config['apis']['publish']['mode'] = 'manual_review'
         with self.assertRaises(ValueError):
