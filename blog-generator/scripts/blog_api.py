@@ -23,6 +23,7 @@ assert spec.loader is not None
 spec.loader.exec_module(project_config)
 
 REQUIRED_CHECKS = {"dedupe", "facts", "scope", "structure", "internal_links"}
+ALLOWED_RELATIONS = {"prerequisite", "deeper_explanation", "evidence_or_example", "next_action"}
 
 
 def load_config(path: Path) -> dict:
@@ -172,6 +173,8 @@ def validate_publish_payload(payload: dict, config: dict) -> None:
     for link in links:
         if not isinstance(link, dict) or not all(isinstance(link.get(k), str) and link[k] for k in ("target_content_id", "target_url", "anchor_text", "relation", "placement")):
             raise ValueError("every internal link needs content ID, URL, anchor, relation and placement")
+        if link["relation"] not in ALLOWED_RELATIONS:
+            raise ValueError("every internal link must use an allowed relation")
     review = payload.get("review")
     if not isinstance(review, dict) or review.get("status") != "approved":
         raise ValueError("payload review.status must be approved")
