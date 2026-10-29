@@ -113,12 +113,22 @@
     "tag": "AI Writing",
     "read_time": "6 min read",
     "image_policy": {
-      "mode": "search_per_article",
-      "preferred_sources": ["pexels"],
-      "preferred_moods": ["healing", "study", "coffee", "scenery", "daily life"],
+      "mode": "generate_or_search_per_article",
+      "preferred_sources": [
+        "generated_editorial",
+        "pexels"
+      ],
+      "preferred_moods": [
+        "thoughtful",
+        "clear",
+        "human",
+        "quietly confident"
+      ],
       "orientation": "landscape",
       "require_unique_url": true,
-      "fallback": "block_publish"
+      "fallback": "block_publish",
+      "art_direction": "humanizer_editorial",
+      "direction_guide": "references/blog-image-direction.md"
     }
   }
 }
