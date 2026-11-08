@@ -45,6 +45,8 @@ description: "研究、规划、撰写或审查任何网站的 Blog；支持按�
 
 例如某主题确有需求但与旧文重叠，应为 `update` 或 `merge`；内容决策是 `merge`、而页面处于观察期时，执行状态为 `frozen`。关键词不同、年份不同、换人群标签、换清单数字、换语气或新 slug 都不构成独立价值。
 
+需要把常青需求、Buzzword 线索、写作、分类和配图接入同一运行链路时，读 [选题到发布的执行链路](references/editorial-pipeline.md)。按项目配置在 brief 阶段确定分类与文章形式，并将同一份编辑记录传给发布接口和配图流程。
+
 ## 防重复与发布门禁
 
 候选检索至少覆盖标题、slug、目标查询、受众情境、读者任务、核心答案、主要步骤、独有材料、canonical、合并和重定向历史。库存较大时先返回 Top 3–5 个候选，但不能把 Top-K 之外的内容假设为不存在。
@@ -80,7 +82,7 @@ description: "研究、规划、撰写或审查任何网站的 Blog；支持按�
 
 配图是当前文章写作与审查的一部分，复用该文章的 brief、项目配置和运行记录，不单独建立设计项目、网站模块或交互入口。需要配图时按 [Blog 配图适配](references/blog-image-direction.md)，先核对现有页面的图片位置、比例、配色和阅读层级，再在这些约束内选择与文章协调的插画、真实截图或授权摄影。图片不必独立解释整篇文章，标题和正文仍承担说明任务。文章主图必须逐篇选择，不能把站点默认分享图、随机图片端点或上一篇图片当作常规回退。Humanizer 的编辑插画方向优先表现写作中的真实取舍、核查和变化；其他项目沿用自己的视觉规范。不要只凭“学习、咖啡、风景”的氛围词选图，也不要把所有主题都套进纸张、机器人或同一套构图。
 
-生成图片保存 brief、最终提示词、可用的工具/版本信息和本地文件；摄影保存来源页面、作者、授权依据和直接 URL；截图必须来自真实界面。它们都要检查文章相关性、历史配图重复、横向展示和描述性替代文本。生成成功不等于图片已上传：只有通过已有获准的存储流程取得稳定 HTTPS 图片 URL 并验证后，才写入原有 `article.image` 字段。若生成工具不可用，按项目允许的来源改用经过同样审查的图片；如果最终仍无合格可访问图片，保留草稿并阻断发布，不回退到默认图或随机图。
+生成图片保存 brief、最终提示词、可用的工具/版本信息和本地文件；摄影保存来源页面、作者、授权依据和直接 URL；截图必须来自真实界面。它们都要检查文章相关性、历史配图重复、横向展示和描述性替代文本。若项目已有获准的发布端异步生图流程，沿用该流程提交站内临时封面和完整文章 brief，由发布端记录 queued/ready/failed 并在验收后替换；queued 不能报告为配图已验收，失败继续显示临时封面并记录原因。其他项目仍按以下同步流程：生成成功不等于图片已上传：只有通过已有获准的存储流程取得稳定 HTTPS 图片 URL 并验证后，才写入原有 `article.image` 字段。若生成工具不可用，按项目允许的来源改用经过同样审查的图片；如果最终仍无合格可访问图片，保留草稿并阻断发布，不回退到默认图或随机图。
 
 发布前同时检查标题、URL、首段、标题层级、描述性内外链、图片替代文本、图片 URL 可访问性、页面加载与移动端可读性；具体技术字段应由站点的发布系统或 SEO 规范提供，不能凭空声称已优化。
 
@@ -91,7 +93,10 @@ description: "研究、规划、撰写或审查任何网站的 Blog；支持按�
 每个候选先输出以下结构，再按用户需要补充 brief、提纲或正文：
 
 ```yaml
-topic_source: product | user_language | gsc | keyword_tool | serp | competitor | existing_content
+topic_source: product | user_language | gsc | keyword_tool | serp | competitor | existing_content | buzzword
+source_type: evergreen | trend | product | competitor | user | search | existing_content
+primary_category: "项目配置中的分类 slug"
+content_type: guide | diagnosis | comparison | case_study | template | explainer | checklist | opinion
 opportunity_type: new_demand | underserved_job | competitor_gap | refresh | consolidation | conversion_support | support_deflection
 candidate_title: ""
 content_disposition: new | update | merge | defer

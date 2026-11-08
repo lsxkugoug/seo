@@ -93,6 +93,19 @@ def validate(config: dict, allow_template_urls: bool) -> None:
     if apis["history"].get("response_contract") != "inventory-v1":
         fail("apis.history.response_contract must be inventory-v1")
 
+    editorial = config.get('editorial_policy')
+    if editorial is not None:
+        if not isinstance(editorial, dict) or type(editorial.get('require_editorial_plan')) is not bool:
+            fail('editorial_policy must declare require_editorial_plan')
+        categories = editorial.get('categories')
+        if not isinstance(categories, list) or not categories or any(not isinstance(item, dict) or not isinstance(item.get('slug'), str) or not item['slug'].strip() for item in categories):
+            fail('editorial_policy.categories needs category slugs')
+        if len({item['slug'] for item in categories}) != len(categories):
+            fail('editorial category slugs must be unique')
+        for key in ('source_types', 'content_types'):
+            if not isinstance(editorial.get(key), list) or not editorial[key] or any(not isinstance(item, str) or not item.strip() for item in editorial[key]):
+                fail('editorial_policy.' + key + ' must contain nonempty strings')
+
 
 def main() -> int:
     parser = argparse.ArgumentParser()

@@ -126,9 +126,50 @@
       ],
       "orientation": "landscape",
       "require_unique_url": true,
-      "fallback": "block_publish",
+      "fallback": "keep_owned_placeholder_and_report",
       "art_direction": "humanizer_editorial",
-      "direction_guide": "references/blog-image-direction.md"
+      "direction_guide": "references/blog-image-direction.md",
+      "delivery": "publisher_async",
+      "pending_image": "https://www.humanizer.help/growth/_assets/editorial-cover.svg"
     }
+  },
+  "editorial_policy": {
+    "require_editorial_plan": true,
+    "categories": [
+      {
+        "slug": "ai-writing",
+        "name": "AI Writing",
+        "reader_task": "General AI writing, editing, detection explanations and tool decisions"
+      },
+      {
+        "slug": "education",
+        "name": "Education",
+        "reader_task": "Learning, teaching and research"
+      },
+      {
+        "slug": "business",
+        "name": "Business",
+        "reader_task": "Workplace and customer communication"
+      }
+    ],
+    "source_types": [
+      "evergreen",
+      "trend",
+      "product",
+      "competitor",
+      "user",
+      "search",
+      "existing_content"
+    ],
+    "content_types": [
+      "guide",
+      "diagnosis",
+      "comparison",
+      "case_study",
+      "template",
+      "explainer",
+      "checklist",
+      "opinion"
+    ]
   }
 }

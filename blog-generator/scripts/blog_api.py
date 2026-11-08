@@ -167,6 +167,21 @@ def validate_publish_payload(payload: dict, config: dict) -> None:
     for field in ("title", "slug", "excerpt", "content_markdown", "author", "tag", "read_time", "image"):
         if not isinstance(article.get(field), str) or not article[field].strip():
             raise ValueError(f"article.{field} is required")
+    policy = config.get('editorial_policy') or {}
+    if policy.get('require_editorial_plan'):
+        editorial = article.get('editorial')
+        if not isinstance(editorial, dict):
+            raise ValueError('article.editorial is required by this project')
+        categories = {item['slug'] for item in policy['categories']}
+        if editorial.get('primary_category') not in categories:
+            raise ValueError('article.editorial.primary_category is not a project category')
+        if editorial.get('source_type') not in policy['source_types'] or editorial.get('content_type') not in policy['content_types']:
+            raise ValueError('article editorial source/type is invalid')
+        for key in ('audience_situation', 'reader_job', 'core_answer', 'reader_takeaway', 'unique_contribution', 'boundary', 'reason'):
+            if not isinstance(editorial.get(key), str) or not editorial[key].strip():
+                raise ValueError('article.editorial.' + key + ' is required')
+        if editorial.get('content_disposition') != 'new':
+            raise ValueError('The editorial decision must approve a distinct new article; updates/merges stay in their existing workflow')
     links = article.get("internal_links")
     if not isinstance(links, list) or len(links) < config["internal_link_policy"]["min_contextual_historical_links"]:
         raise ValueError("payload does not meet required historical internal links")

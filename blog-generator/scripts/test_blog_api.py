@@ -94,9 +94,21 @@ class BlogApiTests(unittest.TestCase):
                 'article': {'title': 'New article', 'slug': 'new-article', 'excerpt': 'excerpt',
                             'content_markdown': 'Read [guide](' + item(1)['url'] + ').',
                             'author': 'Editorial', 'tag': 'Writing', 'read_time': '2 min',
-                            'image': 'https://example.com/image.png', 'internal_links': [link]},
+                            'image': 'https://example.com/image.png', 'internal_links': [link],
+                            'editorial': {'primary_category':'business','source_type':'evergreen','content_type':'template','audience_situation':'A customer waiting for a reply','reader_job':'Reply clearly','core_answer':'Confirm receipt and the next step','reader_takeaway':'A usable reply','unique_contribution':'An illustrative wording comparison','boundary':'No unverified customer story','reason':'A distinct reply task','content_disposition':'new'}},
                 'review': {'status': 'approved', 'checks_passed': list(api.REQUIRED_CHECKS)},
                 'dedupe': {'body_reviewed': True, 'content_disposition': 'new'}}
+
+    def test_project_editorial_policy_blocks_missing_plan_and_non_new_decisions(self):
+        value=self._payload();del value['article']['editorial']
+        with self.assertRaisesRegex(ValueError,'editorial is required'):
+            api.validate_publish_payload(value,self.config)
+        value=self._payload();value['article']['editorial']['content_disposition']='update'
+        with self.assertRaisesRegex(ValueError,'editorial decision'):
+            api.validate_publish_payload(value,self.config)
+        value=self._payload();value['article']['editorial']['primary_category']='random-topic'
+        with self.assertRaisesRegex(ValueError,'project category'):
+            api.validate_publish_payload(value,self.config)
 
     def _publish(self, inventory, payload, execute, fresh=None):
         with tempfile.TemporaryDirectory() as folder:

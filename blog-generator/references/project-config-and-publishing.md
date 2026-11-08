@@ -50,6 +50,8 @@ python3 scripts/validate_project_config.py config/projects/humanizer.local.json
 
 只有所有分页和四种状态均已对账，`coverage.status` 才能是 `complete`。查重候选必须读取相关正文；同时从 `live` 内容中挑选符合当前读者任务的历史链接，满足 `internal_link_policy.min_contextual_historical_links`。链接要真实、相关、已发布且使用描述性锚文本；不能承诺它必然提升排名。
 
+文章的可选 `article.editorial` 字段沿用 [执行链路](editorial-pipeline.md) 的结构。配置要求编辑计划时，该字段为必填；分类、来源类型、文章形式分别保存，配图读取同一份 brief。
+
 ## 自动发布 API：`publish-blog-v1`
 
 后端可新增 `POST /internal/publish_blogs`。接口必须验证配置指定请求头中的密钥，并把 `Idempotency-Key` 作为同一篇提交的去重键。建议后端返回：
