@@ -166,6 +166,16 @@ def validate_publish_payload(payload: dict, config: dict) -> None:
     for field in ("title", "slug", "excerpt", "content_markdown", "author", "tag", "read_time", "image"):
         if not isinstance(article.get(field), str) or not article[field].strip():
             raise ValueError(f"article.{field} is required")
+    policy = config.get("editorial_policy")
+    if policy is not None:
+        editorial = article.get("editorial")
+        if not isinstance(editorial, dict):
+            raise ValueError("article.editorial is required by project editorial_policy")
+        if editorial.get("primary_category") not in policy["primary_categories"]:
+            raise ValueError("article.editorial.primary_category must be an explicitly selected project category")
+        for field in policy.get("required_brief_fields", []):
+            if not isinstance(editorial.get(field), str) or not editorial[field].strip():
+                raise ValueError(f"article.editorial.{field} is required by project editorial_policy")
     links = article.get("internal_links")
     if not isinstance(links, list) or len(links) < config["internal_link_policy"]["min_contextual_historical_links"]:
         raise ValueError("payload does not meet required historical internal links")

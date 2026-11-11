@@ -14,6 +14,7 @@ description: "研究、规划、撰写或审查任何网站的 Blog；支持按�
 - **需要 Semrush、GSC、历史文章 API 或草稿推送 API**：读 [选题研究与系统集成](references/topic-research-and-integration.md) 的对应接口契约。
 - **接入或运行某个站点**：先读 [多项目配置与发布契约](references/project-config-and-publishing.md)，加载该项目的配置；没有有效项目配置时只做研究和草稿，不能调用发布接口。
 - **需要 Humanizer、AI 写作或学生写作示例**：再读 [案例与选题库](references/case-library.md)。案例只说明一种垂直场景，不定义本 Skill 的适用范围。
+- **运行 Humanizer 发布或静态上线**：另读 [Humanizer 分类与上线契约](references/humanizer-publishing.md)，使用当前分类字段、生产对应源码和分类页验收；这些约束不套用其他站点。
 - **验证本 Skill 或接入新站点**：读 [验证协议](references/validation-protocol.md)。
 
 ## 开始前

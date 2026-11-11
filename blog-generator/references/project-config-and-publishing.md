@@ -152,3 +152,10 @@ python3 scripts/blog_api.py publish \
 ```bash
 python3 -m unittest discover -s scripts -p 'test_*.py' -v
 ```
+
+
+## 项目分类与编辑元数据
+
+项目可通过可选 `editorial_policy` 配置 `primary_categories`（非空唯一 slug 列表）和 `required_brief_fields`（必填文本字段名）。配置后 CLI 在预检及发送前要求 `article.editorial.primary_category` 显式匹配一个分类，并验证相应 brief 文本非空；不配置的站点保持兼容。分类标识不是卡片 `tag`、SEO keyword 或 intent_cluster，不互相替代。分类不是独立价值：查重仍跨全部分类及退役历史，不能把同一任务换分类再建 URL。
+
+Humanizer 的具体枚举、payload 示例、归类原则及分类页上线验收见 [Humanizer 分类与上线契约](humanizer-publishing.md)。后端兼容旧请求的推断不是新生产任务省略分类的理由。CLI 只验证字段，不证明语义归类正确。

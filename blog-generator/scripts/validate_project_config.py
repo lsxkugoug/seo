@@ -68,6 +68,16 @@ def validate(config: dict, allow_template_urls: bool) -> None:
     min_links = config["internal_link_policy"].get("min_contextual_historical_links")
     if type(min_links) is not int or min_links < 1:
         fail("internal_link_policy.min_contextual_historical_links must be a positive integer")
+    policy = config.get("editorial_policy")
+    if policy is not None:
+        if not isinstance(policy, dict):
+            fail("editorial_policy must be an object")
+        categories = policy.get("primary_categories")
+        if not isinstance(categories, list) or not categories or any(not isinstance(c, str) or not c.strip() for c in categories) or len(set(categories)) != len(categories):
+            fail("editorial_policy.primary_categories must contain unique non-empty category slugs")
+        fields = policy.get("required_brief_fields", [])
+        if not isinstance(fields, list) or any(not isinstance(f, str) or not f.strip() for f in fields):
+            fail("editorial_policy.required_brief_fields must contain field names")
     apis = config["apis"]
     if not isinstance(apis, dict) or set(apis) != {"history", "publish"}:
         fail("apis must contain exactly history and publish")

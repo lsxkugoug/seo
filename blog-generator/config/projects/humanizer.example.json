@@ -114,11 +114,30 @@
     "read_time": "6 min read",
     "image_policy": {
       "mode": "search_per_article",
-      "preferred_sources": ["pexels"],
-      "preferred_moods": ["healing", "study", "coffee", "scenery", "daily life"],
+      "preferred_sources": [
+        "pexels"
+      ],
+      "preferred_moods": [
+        "healing",
+        "study",
+        "coffee",
+        "scenery",
+        "daily life"
+      ],
       "orientation": "landscape",
       "require_unique_url": true,
       "fallback": "block_publish"
     }
+  },
+  "editorial_policy": {
+    "primary_categories": [
+      "ai-writing",
+      "education",
+      "business"
+    ],
+    "required_brief_fields": [
+      "reader_job",
+      "audience_situation"
+    ]
   }
 }

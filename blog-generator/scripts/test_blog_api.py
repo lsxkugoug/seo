@@ -94,7 +94,9 @@ class BlogApiTests(unittest.TestCase):
                 'article': {'title': 'New article', 'slug': 'new-article', 'excerpt': 'excerpt',
                             'content_markdown': 'Read [guide](' + item(1)['url'] + ').',
                             'author': 'Editorial', 'tag': 'Writing', 'read_time': '2 min',
-                            'image': 'https://example.com/image.png', 'internal_links': [link]},
+                            'image': 'https://example.com/image.png', 'internal_links': [link],
+                            'editorial': {'primary_category': 'ai-writing', 'reader_job': 'Review a draft',
+                                          'audience_situation': 'Author revising a draft'}},
                 'review': {'status': 'approved', 'checks_passed': list(api.REQUIRED_CHECKS)},
                 'dedupe': {'body_reviewed': True, 'content_disposition': 'new'}}
 
@@ -111,6 +113,26 @@ class BlogApiTests(unittest.TestCase):
                 except ValueError:
                     self.assertEqual(publish.call_count, 0)
                     raise
+
+    def test_editorial_policy_blocks_missing_invalid_category_and_empty_brief_before_post(self):
+        for change in [lambda p: p['article'].pop('editorial'),
+                       lambda p: p['article']['editorial'].pop('primary_category'),
+                       lambda p: p['article']['editorial'].update(primary_category='AI Writing'),
+                       lambda p: p['article']['editorial'].update(reader_job=' '),
+                       lambda p: p['article']['editorial'].update(audience_situation=None)]:
+            p = self._payload(); change(p)
+            with self.subTest(payload=p), self.assertRaises(ValueError):
+                self._publish(page([item(1)], 1), p, True)
+
+    def test_each_project_category_passes_offline_preflight(self):
+        for category in self.config['editorial_policy']['primary_categories']:
+            p = self._payload(); p['article']['editorial']['primary_category'] = category
+            self.assertEqual(self._publish(page([item(1)], 1), p, False), (0, 0, 0))
+
+    def test_other_projects_without_editorial_policy_remain_compatible(self):
+        self.config.pop('editorial_policy')
+        p = self._payload(); p['article'].pop('editorial')
+        self.assertEqual(self._publish(page([item(1)], 1), p, False), (0, 0, 0))
 
     def test_offline_preflight_does_not_publish(self):
         self.assertEqual(self._publish(page([item(1)], 1), self._payload(), False), (0, 0, 0))

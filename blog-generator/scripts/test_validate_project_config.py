@@ -20,6 +20,16 @@ class ProjectConfigTests(unittest.TestCase):
         data = json.loads(HUMANIZER_EXAMPLE.read_text(encoding="utf-8"))
         validator.validate(data, allow_template_urls=True)
 
+    def test_invalid_editorial_policy_is_rejected(self):
+        for policy in [[], {}, {'primary_categories': []},
+                       {'primary_categories': ['ai-writing', 'ai-writing']},
+                       {'primary_categories': [{}]},
+                       {'primary_categories': ['ai-writing'], 'required_brief_fields': 'reader_job'}]:
+            data = json.loads(HUMANIZER_EXAMPLE.read_text())
+            data['editorial_policy'] = policy
+            with self.subTest(policy=policy), self.assertRaises(ValueError):
+                validator.validate(data, allow_template_urls=True)
+
     def test_template_endpoint_cannot_be_used_as_live_config(self):
         data = json.loads(TEMPLATE_EXAMPLE.read_text(encoding="utf-8"))
         with self.assertRaises(ValueError):
