@@ -170,6 +170,7 @@
       "explainer",
       "checklist",
       "opinion"
-    ]
+    ],
+    "require_source_lineage": true
   }
 }
